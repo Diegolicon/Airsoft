@@ -15,7 +15,6 @@ public class PessoaFisica extends Pessoa {
 
     }
 
-    // Getters e setters
     public String getCpf() {
         return cpf;
     }

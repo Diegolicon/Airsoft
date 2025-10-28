@@ -22,7 +22,6 @@ public abstract class Pessoa extends IdentidadePadrao{
     @JoinColumn(name = "id_telefone")
     private Telefone telefone;
 
-    // Getters e setters
     public Long getId() {
         return id;
     }

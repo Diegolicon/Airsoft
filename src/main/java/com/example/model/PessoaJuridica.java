@@ -12,7 +12,6 @@ public class PessoaJuridica extends Pessoa {
 
     }
 
-    // Getters e setters
     public String getCnpj() {
         return cnpj;
     }

@@ -17,7 +17,6 @@ public class Pedido extends IdentidadePadrao {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }
