@@ -1,6 +1,7 @@
 package com.example.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 public class Pedido extends IdentidadePadrao {
@@ -10,8 +11,9 @@ public class Pedido extends IdentidadePadrao {
 
     private Double valorTotal;
     private String status;
-    private String quantidade;
 
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemPedido> itens;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cliente_id", nullable = false)
@@ -39,14 +41,6 @@ public class Pedido extends IdentidadePadrao {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(String quantidade) {
-        this.quantidade = quantidade;
     }
 
     public Cliente getCliente() {

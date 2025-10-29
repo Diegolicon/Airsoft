@@ -6,7 +6,6 @@ public record PedidoResponseDTO(
         Long id,
         double valorTotal,
         String status,
-        String quantidade,
         Long clienteId) {
 
     public static PedidoResponseDTO valueOf(Pedido pedido) {
@@ -16,7 +15,6 @@ public record PedidoResponseDTO(
                 pedido.getId(),
                 pedido.getValorTotal(),
                 pedido.getStatus(),
-                pedido.getQuantidade(),
                 pedido.getCliente().getId());
     }
 }

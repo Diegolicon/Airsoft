@@ -1,0 +1,15 @@
+// src/main/java/com/example/DTO/ItemPedidoDTO.java
+
+package com.example.DTO;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+public record ItemPedidoDTO(
+        Long produtoId,
+        Long acessorioId,
+
+        @NotNull(message = "A quantidade deve ser informada.")
+        @Positive(message = "A quantidade deve ser positiva.")
+        Integer quantidade
+) {}

@@ -29,7 +29,6 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = new Pedido();
         pedido.setValorTotal(pedidoDTO.valorTotal());
         pedido.setStatus(pedidoDTO.status());
-        pedido.setQuantidade(pedidoDTO.quantidade());
 
         Cliente cliente = clienteRepository.findById(pedidoDTO.clienteId());
         if (cliente == null) {
@@ -67,7 +66,6 @@ public class PedidoServiceImpl implements PedidoService {
 
         pedido.setValorTotal(pedidoDTO.valorTotal());
         pedido.setStatus(pedidoDTO.status());
-        pedido.setQuantidade(pedidoDTO.quantidade());
 
         Cliente cliente = clienteRepository.findById(pedidoDTO.clienteId());
         if (cliente == null) {

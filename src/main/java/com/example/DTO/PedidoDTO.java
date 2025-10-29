@@ -1,10 +1,12 @@
 package com.example.DTO;
 
-import com.example.model.Pessoa;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 public record PedidoDTO(
 
@@ -19,10 +21,10 @@ public record PedidoDTO(
         )
         String status,
 
-        @NotBlank(message = "A quantidade deve ser informada.")
-        String quantidade,
-
         @NotNull(message = "O ID do cliente deve ser informado.")
-        Long clienteId
+        Long clienteId,
 
+        @Valid
+        @NotEmpty(message = "O pedido deve conter pelo menos um item.")
+        List<ItemPedidoDTO> itens
 ) {}
