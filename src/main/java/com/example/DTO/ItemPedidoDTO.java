@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Positive;
 
 public record ItemPedidoDTO(
         Long produtoId,
-        Long acessorioId,
 
         @NotNull(message = "A quantidade deve ser informada.")
         @Positive(message = "A quantidade deve ser positiva.")

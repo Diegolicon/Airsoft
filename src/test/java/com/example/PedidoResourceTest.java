@@ -30,8 +30,7 @@
 //         PedidoDTO pedidoDTO = new PedidoDTO(
 //                 6000.0,
 //                 "a caminho",
-//                 "5x AK-47",
-//                 5L
+//                 "5x AK-47"
 //         );
 
 //         given()
@@ -47,8 +46,7 @@
 //         final PedidoDTO pedidoDTO = new PedidoDTO(
 //                 4200.0,
 //                 "a caminho",
-//                 1L,
-//                 2L);
+//                 1L);
 
 //         given()
 //                 .contentType(ContentType.JSON)
@@ -62,7 +60,7 @@
 
 //     @Test
 //     void testApagarPedido() {
-//         PedidoDTO pedidoDTO = new PedidoDTO(4200.0, "separando", 2L, 1L);
+//         PedidoDTO pedidoDTO = new PedidoDTO(4200.0, "separando", 2L);
 //         PedidoResponseDTO pedidoCriado = pedidoService.createPedido(pedidoDTO);
 //         idPedidoTeste = pedidoCriado.id();
 

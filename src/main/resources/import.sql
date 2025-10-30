@@ -35,37 +35,21 @@ insert into cliente(saldo, vip, observacoes, pessoa_id)
 values (2000,TRUE,'Empresa de Segurança',3),
        (750,TRUE,'Empresa de Roupa',4);
 
-insert into pedido (valortotal, status, cliente_id)
-values (2700.00, 'a caminho', 1),
-       (1500.00, 'entregue', 2),
-       (2400.00, 'separando', 1),
-       (3000.00, 'a caminho', 2),
-       (2250.00, 'a caminho', 1),
-       (210.00, 'entregue', 2);
+insert into pedido (status, cliente_id)
+values ('a caminho', 1),
+       ('entregue', 2),
+       ('separando', 1),
+       ('a caminho', 2),
+       ('a caminho', 1),
+       ('entregue', 2);
 
-INSERT INTO acessorio (nome, fabricante, tipo, material, preco, compatibilidade)
-VALUES ('Red Dot Sight', 'EOTech', 'Mira', 'Alumínio', 450.00, 'Picatinny Rail'),
-       ('Suppressor 5.56', 'SureFire', 'Supressor', 'Titânio', 600.00, 'Rosca M27x1'),
-       ('Lpvo 1-6x24', 'Vortex', 'Luneta', 'Alumínio', 750.00, 'Montagem 30mm'),
-       ('Bipé Tático', 'Magpul', 'Bipé', 'Polímero', 120.00, 'M-LOK / Picatinny'),
-       ('Pente 30 Rounds 7.62', 'Magpul', 'Pente', 'Polímero', 45.00, 'AK-47'),
-       ('Carregador de Bateria', 'Hera Arms', 'Carregador', 'Plástico', 80.00, 'Todos os modelos de Li-Po'),
-       ('Kit Conversão .22LR', 'CMMG', 'Kit Conversao', 'Aço / Polímero', 350.00, 'Plataforma AR-15'),
-       ('Bandoleira 2 Pontas', 'Blue Force Gear', 'Bandoleira', 'Nylon', 55.00, 'Todos os Rifles');
+-- INSERT INTO itempedido (pedido_id, produto_id, quantidade, preco_unitario)
+-- VALUES
+-- (1, 1, 1, 1200),
+-- (1, 2, 1, 1500.00),
 
-INSERT INTO itempedido (pedido_id, produto_id, acessorio_id, quantidade, preco_unitario)
-VALUES
-(1, 1, NULL, 1, 1200),
-(1, 2, NULL, 1, 1500.00),
+-- (2, 2, 1, 1500.00),
 
-(2, 2, NULL, 1, 1500.00),
+-- (3, 1, 2, 2400.00),
 
-(3, 1, NULL, 2, 1200.00),
-
-(4, 2, NULL, 2, 1500.00),
-
-(5, 2, NULL, 1, 1500.00),
-(5, NULL, 3, 1, 750.00),
-
-(6, NULL, 5, 2, 45.00),
-(6, NULL, 4, 1, 120.00);
+-- (4, 2, 2, 1500.00),

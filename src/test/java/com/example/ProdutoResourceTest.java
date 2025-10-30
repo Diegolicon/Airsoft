@@ -57,7 +57,7 @@ public class ProdutoResourceTest {
     @Test
     void testCriar() {
         ProdutoDTO produtoParaCriar = new ProdutoDTO(
-                "AK-47",
+                "AK-45",
                 "Izmash",
                 "fuzil",
                 "automatico",

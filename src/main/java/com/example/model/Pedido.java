@@ -1,7 +1,10 @@
 package com.example.model;
 
-import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.*;
 
 @Entity
 public class Pedido extends IdentidadePadrao {
@@ -12,12 +15,20 @@ public class Pedido extends IdentidadePadrao {
     private Double valorTotal;
     private String status;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemPedido> itens;
+    @OneToMany(mappedBy = "id")
+    private List<ItemPedido> itens = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
+
+    private Double CalcularTotal(){
+        if (itens!=null) {
+            for (ItemPedido i : itens) {     
+                valorTotal += i.getSubtotal();  
+            }     
+        } return valorTotal; 
+    } 
 
     public Long getId() {
         return id;
