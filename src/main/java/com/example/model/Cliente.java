@@ -8,7 +8,7 @@ public class Cliente extends IdentidadePadrao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double saldo;
+    private double saldo;
     private boolean vip;
     private String observacoes;
 
@@ -26,11 +26,11 @@ public class Cliente extends IdentidadePadrao {
         this.id = id;
     }
 
-    public Double getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(Double saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 

@@ -6,7 +6,7 @@ public record ClienteDTO(
 
         @NotNull(message = "O saldo deve ser informado.")
         @PositiveOrZero(message = "O saldo deve ser positivo ou zero.")
-        Double saldo,
+        double saldo,
 
         boolean vip,
 

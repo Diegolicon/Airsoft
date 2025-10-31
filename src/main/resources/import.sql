@@ -35,21 +35,28 @@ insert into cliente(saldo, vip, observacoes, pessoa_id)
 values (2000,TRUE,'Empresa de Segurança',3),
        (750,TRUE,'Empresa de Roupa',4);
 
-insert into pedido (status, cliente_id)
-values ('a caminho', 1),
-       ('entregue', 2),
-       ('separando', 1),
-       ('a caminho', 2),
-       ('a caminho', 1),
-       ('entregue', 2);
+insert into pedido (status, cliente_id, datacadastro)
+values ('mudou', 1, now()),
+       ('entregue', 2, now()),
+       ('separando', 1, now()),
+       ('a caminho', 2, now()),
+       ('a caminho', 1, now()),
+       ('entregue', 2, now());
 
--- INSERT INTO itempedido (pedido_id, produto_id, quantidade, preco_unitario)
--- VALUES
--- (1, 1, 1, 1200),
--- (1, 2, 1, 1500.00),
+INSERT INTO itempedido (pedido_id, produto_id, quantidade, preco_unitario, datacadastro)
+VALUES
+(1, 1, 1, 1200,00 now()),
+(1, 2, 1, 1500.00, now()),
 
--- (2, 2, 1, 1500.00),
+(2, 2, 1, 1500.00, now()),
 
--- (3, 1, 2, 2400.00),
+(3, 1, 2, 1200.00, now()),
 
--- (4, 2, 2, 1500.00),
+(4, 2, 2, 1500.00, now());
+
+UPDATE pedido p
+SET valorTotal = (
+    SELECT COALESCE(SUM(ip.quantidade * ip.preco_unitario), 0)
+    FROM itempedido ip
+    WHERE ip.pedido_id = p.id
+);

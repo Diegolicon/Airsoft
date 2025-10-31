@@ -3,8 +3,7 @@ package com.example.model;
 import jakarta.persistence.*;
 
 @Entity
-public class ItemPedido {
-
+public class ItemPedido extends IdentidadePadrao{    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,14 +13,27 @@ public class ItemPedido {
     private Pedido pedido;
 
     @ManyToOne
-    @JoinColumn(name = "produto_id")
+    @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
     private Integer quantidade;
 
-    private Double precoUnitario;
+    @Column(name = "preco_unitario")
+    private double precoUnitario;
 
-    public Double getSubtotal() {
+    @jakarta.persistence.Transient
+    public double getSubtotal() {
         return precoUnitario * quantidade;
+    }
+
+    public ItemPedido(Pedido pedido, Produto produto, Integer quantidade, double precoUnitario){
+        this.pedido = pedido;
+        this.produto =  produto;
+        this.quantidade = quantidade;
+        this.precoUnitario = precoUnitario;
+    }
+
+    public ItemPedido(){
+        
     }
 }
