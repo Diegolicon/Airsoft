@@ -3,7 +3,7 @@ package com.example.DTO;
 public record ClienteResponseDTO(
 
         Long id,
-        double saldo,
+        Double saldo,
         boolean vip,
         String observacoes,
         Long pessoaId

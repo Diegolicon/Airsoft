@@ -9,7 +9,7 @@ public record ProdutoResponseDTO(
         String tipo,
         String sistema,
         String material,
-        double preco
+        float preco
 ) {
     public static ProdutoResponseDTO valueOf(Produto produto) {
         if (produto == null)

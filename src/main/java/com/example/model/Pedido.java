@@ -3,8 +3,7 @@ package com.example.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
-
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,30 +12,23 @@ public class Pedido extends IdentidadePadrao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double valorTotal;
+    private Double valorTotal;
     private String status;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "id")
     private List<ItemPedido> itens = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    private double CalcularTotal(){
-        if (itens != null) {
+    private Double CalcularTotal(){
+        if (itens!=null) {
             for (ItemPedido i : itens) {     
                 valorTotal += i.getSubtotal();  
             }     
-        } 
-        return valorTotal;
-    }
-
-    public void AdicionarItem(Produto produto, Integer quantidade){
-        ItemPedido item = new ItemPedido(this, produto, quantidade, produto.getPreco());
-        itens.add(item);
-        CalcularTotal();
-    }
+        } return valorTotal; 
+    } 
 
     public Long getId() {
         return id;
@@ -46,11 +38,11 @@ public class Pedido extends IdentidadePadrao {
         this.id = id;
     }
 
-    public double getValorTotal() {
+    public Double getValorTotal() {
         return valorTotal;
     }
 
-    public void setValorTotal(double valorTotal) {
+    public void setValorTotal(Double valorTotal) {
         this.valorTotal = valorTotal;
     }
 

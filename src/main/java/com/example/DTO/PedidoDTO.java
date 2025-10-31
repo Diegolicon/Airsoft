@@ -22,9 +22,5 @@ public record PedidoDTO(
         String status,
 
         @NotNull(message = "O ID do cliente deve ser informado.")
-        Long clienteId,
-
-        @Valid
-        @NotEmpty(message = "O pedido deve conter pelo menos um item.")
-        List<ItemPedidoDTO> itens
+        Long clienteId      
 ) {}

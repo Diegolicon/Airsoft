@@ -30,8 +30,7 @@ public class PedidoResourceTest {
         PedidoDTO pedidoDTO = new PedidoDTO(
                 6000.0,
                 "a caminho",
-                2L,
-                null
+                1L
         );
 
         given()
@@ -39,7 +38,7 @@ public class PedidoResourceTest {
                 .body(pedidoDTO)
                 .when().post("/pedidos")
                 .then()
-                .statusCode(404);
+                .statusCode(201);
     }
 
     @Test
@@ -47,8 +46,8 @@ public class PedidoResourceTest {
         final PedidoDTO pedidoDTO = new PedidoDTO(
                 4200.0,
                 "a caminho",
-                1L, 
-                null);
+                1L
+                );
 
         given()
                 .contentType(ContentType.JSON)
@@ -62,10 +61,11 @@ public class PedidoResourceTest {
 
     @Test
     void testApagarPedido() {
-        PedidoDTO pedidoDTO = new PedidoDTO(5000.0, "separando", 5L, null);
+        PedidoDTO pedidoDTO = new PedidoDTO(4200.0, "separando", 2L);
         PedidoResponseDTO pedidoCriado = pedidoService.createPedido(pedidoDTO);
         idPedidoTeste = pedidoCriado.id();
 
+        // Apaga via endpoint REST
         given()
                 .pathParam("id", idPedidoTeste)
                 .when().delete("/pedidos/{id}")

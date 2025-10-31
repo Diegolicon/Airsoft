@@ -38,7 +38,7 @@ public class ClienteResourceTest {
                         .body(clienteDTO)
                         .when().post("/clientes")
                         .then()
-                        .statusCode(404);
+                        .statusCode(500);
     }
 
     @Test

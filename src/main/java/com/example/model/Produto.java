@@ -14,7 +14,7 @@ public class Produto extends IdentidadePadrao{
     private String tipo;
     private String sistema;
     private String material;
-    private double preco;
+    private float preco;
 
     public Long getId() {
         return id;
@@ -64,11 +64,11 @@ public class Produto extends IdentidadePadrao{
         this.material = material;
     }
 
-    public double getPreco() {
+    public float getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(float preco) {
         this.preco = preco;
     }
 }

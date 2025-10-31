@@ -10,4 +10,5 @@ public class EnderecoRepository implements PanacheRepository<Endereco> {
     public Endereco findBySigla(String cep) {
         return find("SELECT e FROM Endereco e WHERE e.cep = ?1 ", cep).firstResult();
     }
+
 }

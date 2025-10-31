@@ -10,5 +10,9 @@ public record ItemPedidoDTO(
 
         @NotNull(message = "A quantidade deve ser informada.")
         @Positive(message = "A quantidade deve ser positiva.")
-        Integer quantidade
+        Integer quantidade,
+
+        @NotNull(message = "A quantidade deve ser informada.")
+        @Positive(message = "A quantidade deve ser positiva.")
+        Double precoUnitario
 ) {}

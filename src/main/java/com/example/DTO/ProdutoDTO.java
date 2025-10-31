@@ -34,7 +34,8 @@ public record ProdutoDTO(
         @Size(max = 30, message = "O material deve ter no máximo 30 caracteres.")
         String material,
 
+        @NotNull(message = "O preço da produto deve ser informado.")
         @Positive(message = "O preço deve ser um valor positivo.")
-        double preco) {
+        float preco) {
 
 }
