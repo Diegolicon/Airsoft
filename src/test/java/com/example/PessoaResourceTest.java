@@ -139,4 +139,4 @@ public class PessoaResourceTest {
 
         PessoaResponseDTO responseApagada = pessoaService.getPessoaById(idParaApagar);
         assertNull(responseApagada);
-}
+}}
