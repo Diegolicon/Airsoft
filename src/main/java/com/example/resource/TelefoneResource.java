@@ -4,6 +4,7 @@ import com.example.DTO.TelefoneDTO;
 import com.example.DTO.TelefoneResponseDTO;
 import com.example.service.TelefoneService;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -19,15 +20,6 @@ public class TelefoneResource {
     @Inject
     TelefoneService telefoneService;
 
-    @POST
-    public Response create(@Valid TelefoneDTO telefoneDTO) {
-        try {
-            TelefoneResponseDTO created = telefoneService.create(telefoneDTO);
-            return Response.status(Status.CREATED).entity(created).build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
-    }
 
     @GET
     @Path("/{id}")
@@ -46,16 +38,14 @@ public class TelefoneResource {
     }
 
     @PUT
-    @Path("/{id}")
-    public Response update(@PathParam("id") Long id, @Valid TelefoneDTO telefoneDTO) {
-        try {
-            TelefoneResponseDTO updated = telefoneService.update(id, telefoneDTO);
-            return Response.ok(updated).build(); // Retorna 200 com o objeto atualizado
-        } catch (NotFoundException e) {
-            return Response.status(Status.NOT_FOUND).build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
+    @Path("/{id}") // Endpoint: PUT /telefones/1
+    @Transactional
+    public Response updateTelefone(
+            @PathParam("id") Long id,
+            @Valid TelefoneDTO telefoneDTO) {
+
+        telefoneService.update(id, telefoneDTO);
+        return Response.noContent().build();
     }
 
     @DELETE

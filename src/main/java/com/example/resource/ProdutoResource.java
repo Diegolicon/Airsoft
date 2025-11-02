@@ -52,8 +52,8 @@ public class ProdutoResource {
     @GET
     @Path("/search")
     public Response findByNome(@QueryParam("nome") String nome) {
-        List<ProdutoResponseDTO> lista = produtoService.findByNome(nome);
-        return Response.ok(lista).build();
+        ProdutoResponseDTO produto = produtoService.findByNome(nome);
+        return Response.ok(produto).build();
     }
 
     @GET

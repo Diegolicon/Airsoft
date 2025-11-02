@@ -1,23 +1,28 @@
-// src/main/java/com/example/DTO/ItemPedidoResponseDTO.java
-
 package com.example.DTO;
 
-import java.io.Serializable;
+import com.example.model.ItemPedido;
+import java.math.BigDecimal;
 
+/*
+ * Documentação:
+ * DTO de resposta para um item, usado dentro da lista do PedidoResponseDTO.
+ * Ele mostra a quantidade, o preço *salvo* no pedido (e não o preço
+ * atual do produto) e os dados simples do produto.
+ */
 public record ItemPedidoResponseDTO(
         Long id,
-        Long produtoId,
         Integer quantidade,
-        Double precoUnitario,
-        Double subtotal
-) implements Serializable {
-    public static ItemPedidoResponseDTO fromEntity(com.example.model.ItemPedido itemPedido) {
+        BigDecimal preco, // O preço que foi salvo no pedido
+        ProdutoResponseDTO produto
+) {
+    public static ItemPedidoResponseDTO valueOf(ItemPedido item) {
+        if (item == null)
+            return null;
         return new ItemPedidoResponseDTO(
-            itemPedido.getId(),
-            itemPedido.getProduto() != null ? itemPedido.getProduto().getId() : null,
-            itemPedido.getQuantidade(),
-            itemPedido.getPrecoUnitario(),
-            itemPedido.getSubtotal()
+                item.getId(),
+                item.getQuantidade(),
+                item.getPreco(),
+                ProdutoResponseDTO.valueOf(item.getProduto())
         );
     }
 }

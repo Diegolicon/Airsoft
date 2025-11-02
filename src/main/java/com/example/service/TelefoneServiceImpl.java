@@ -2,7 +2,9 @@ package com.example.service;
 
 import com.example.DTO.TelefoneDTO;
 import com.example.DTO.TelefoneResponseDTO;
+import com.example.model.Pessoa;
 import com.example.model.Telefone;
+import com.example.repository.PessoaRepository;
 import com.example.repository.TelefoneRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -17,23 +19,27 @@ public class TelefoneServiceImpl implements TelefoneService {
     @Inject
     TelefoneRepository telefoneRepository;
 
-    private void validarTelefone(TelefoneDTO telefoneDTO) {
-        if (telefoneDTO.ddd() == null || telefoneDTO.ddd().trim().isEmpty() || !telefoneDTO.ddd().matches("[0-9]{2}") ) {
-            throw new IllegalArgumentException("DDD deve ser informado e conter 2 números.");
-        }
-        if (telefoneDTO.numero() == null || telefoneDTO.numero().trim().isEmpty() || !telefoneDTO.numero().matches("[0-9]+") || telefoneDTO.numero().length() < 8 || telefoneDTO.numero().length() > 9) {
-            throw new IllegalArgumentException("Número de telefone deve ser informado e conter apenas números, com 8 ou 9 dígitos.");
-        }
-    }
+    @Inject
+    PessoaRepository pessoaRepository;
+
 
     @Override
     @Transactional
-    public TelefoneResponseDTO create(TelefoneDTO telefoneDTO) {
-        validarTelefone(telefoneDTO);
+    public TelefoneResponseDTO create(Long pessoaId, TelefoneDTO dto) {
+
+        Pessoa pessoa = pessoaRepository.findById(pessoaId);
+        if (pessoa == null) {
+            throw new NotFoundException("Pessoa não encontrada com o ID: " + pessoaId);
+        }
+
         Telefone telefone = new Telefone();
-        telefone.setDdd(telefoneDTO.ddd());
-        telefone.setNumero(telefoneDTO.numero());
+        telefone.setDdd(dto.ddd());
+        telefone.setNumero(dto.numero());
+        telefone.setTipo(dto.tipo());
+        telefone.setPessoa(pessoa);
+
         telefoneRepository.persist(telefone);
+
         return TelefoneResponseDTO.valueOf(telefone);
     }
 
@@ -57,15 +63,17 @@ public class TelefoneServiceImpl implements TelefoneService {
     @Override
     @Transactional
     public TelefoneResponseDTO update(Long id, TelefoneDTO telefoneDTO) {
-        validarTelefone(telefoneDTO);
         Telefone telefone = telefoneRepository.findById(id);
         if (telefone == null) {
             throw new NotFoundException("Telefone não encontrado com o ID: " + id);
         }
         telefone.setDdd(telefoneDTO.ddd());
         telefone.setNumero(telefoneDTO.numero());
-        telefoneRepository.persist(telefone); // Atualiza a entidade
-        return TelefoneResponseDTO.valueOf(telefone);
+        telefone.setTipo(telefoneDTO.tipo());
+
+        telefoneRepository.persist(telefone);
+
+            return TelefoneResponseDTO.valueOf(telefone);
     }
 
     @Override
@@ -84,4 +92,11 @@ public class TelefoneServiceImpl implements TelefoneService {
                 .map(TelefoneResponseDTO::valueOf)
                 .collect(Collectors.toList());
     }
+
+    public List<TelefoneResponseDTO> getTelefonesByPessoaId(Long pessoaId) {
+        return telefoneRepository.findByPessoaId(pessoaId).stream()
+                .map(TelefoneResponseDTO::valueOf)
+                .collect(Collectors.toList());
+    }
+
 }

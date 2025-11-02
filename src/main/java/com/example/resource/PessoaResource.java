@@ -5,6 +5,7 @@ import com.example.DTO.*;
 import com.example.service.EnderecoService;
 import com.example.service.PessoaService;
 
+import com.example.service.TelefoneService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status; // Importar o Status
+
+import java.util.List;
 
 @Path("/pessoas")
 @ApplicationScoped
@@ -117,6 +120,35 @@ public class PessoaResource {
         return Response.status(Status.CREATED)
                 .entity(responseDTO)
                 .build();
+    }
+
+    // Em: resource/PessoaResource.java
+// ... (imports e classe)
+
+    @Inject
+    TelefoneService telefoneService; // INJETE O NOVO SERVIÇO
+
+    // ... (Endpoints de Pessoa e Endereço) ...
+
+    // --- ENDPOINTS DE TELEFONE (ANINHADOS) ---
+
+    @POST
+    @Path("/{id}/telefones") // Endpoint: POST /pessoas/1/telefones
+    @Transactional
+    public Response addTelefone(
+            @PathParam("id") Long pessoaId,
+            @Valid TelefoneDTO dto) {
+
+        TelefoneResponseDTO responseDTO = telefoneService.create(pessoaId, dto);
+        return Response.status(Status.CREATED).entity(responseDTO).build();
+    }
+
+    @GET
+    @Path("/{id}/telefones") // Endpoint: GET /pessoas/1/telefones
+    public Response getTelefonesByPessoaId(@PathParam("id") Long pessoaId) {
+
+        List<TelefoneResponseDTO> responseList = telefoneService.getTelefonesByPessoaId(pessoaId);
+        return Response.ok(responseList).build();
     }
 
 }

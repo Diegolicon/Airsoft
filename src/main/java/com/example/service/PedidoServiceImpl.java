@@ -64,8 +64,11 @@ public class PedidoServiceImpl implements PedidoService {
                 throw new NotFoundException("Produto não encontrado com o ID: " + itemDTO.produtoId());
             }
 
-            // (Lógica de Negócio Opcional: Validar estoque)
-            if (produto.getEstoque() < itemDTO.quantidade()) {
+            // 1. Verificação de segurança (trata null como 0)
+            int estoqueDisponivel = (produto.getEstoque() == null) ? 0 : produto.getEstoque();
+
+            // 2. Compara com o estoque seguro
+            if (estoqueDisponivel < itemDTO.quantidade()) {
                 throw new BadRequestException("Estoque insuficiente para o produto: " + produto.getNome());
             }
 
@@ -73,10 +76,7 @@ public class PedidoServiceImpl implements PedidoService {
             ItemPedido item = new ItemPedido();
             item.setProduto(produto);
             item.setQuantidade(itemDTO.quantidade());
-            // PRÁTICA CRUCIAL: Salva o preço do produto NO MOMENTO da compra
             item.setPreco(produto.getPreco());
-
-            // Link bi-direcional: O Item precisa saber a qual Pedido pertence
             item.setPedido(pedido);
             itens.add(item);
 
@@ -85,10 +85,7 @@ public class PedidoServiceImpl implements PedidoService {
             // produtoRepository.persist(produto); // (Panache gerencia isso)
         }
 
-        // 4. Adiciona a lista final de itens ao pedido
         pedido.setItens(itens);
-
-        // 5. Salva o Pedido (e os Itens, por causa do CascadeType.ALL)
         pedidoRepository.persist(pedido);
 
         // 6. Retorna o DTO de Resposta

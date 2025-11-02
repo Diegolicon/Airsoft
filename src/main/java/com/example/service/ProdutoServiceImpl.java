@@ -9,6 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @ApplicationScoped
@@ -56,11 +57,11 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public List<ProdutoResponseDTO> findByNome(String nome) {
+    public ProdutoResponseDTO findByNome(String nome) {
+        // Retorna nulo se não encontrar
         return produtoRepository.findByNome(nome)
-                .stream()
                 .map(ProdutoResponseDTO::valueOf)
-                .toList();
+                .orElse(null);
     }
 
     @Override

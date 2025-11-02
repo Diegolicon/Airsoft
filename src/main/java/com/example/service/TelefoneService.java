@@ -5,11 +5,13 @@ import com.example.DTO.TelefoneResponseDTO;
 import java.util.List;
 
 public interface TelefoneService {
-    TelefoneResponseDTO create(TelefoneDTO telefoneDTO);
+    TelefoneResponseDTO create(Long pessoaId, TelefoneDTO dto);
     TelefoneResponseDTO findById(Long id);
     List<TelefoneResponseDTO> findAll();
-    TelefoneResponseDTO update(Long id, TelefoneDTO telefoneDTO);
+    TelefoneResponseDTO update(Long telefoneId, TelefoneDTO dto);
     void delete(Long id);
 
     List<TelefoneResponseDTO> findByDdd(String ddd);
+
+    List<TelefoneResponseDTO> getTelefonesByPessoaId(Long pessoaId);
 }
