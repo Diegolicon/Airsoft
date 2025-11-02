@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.math.BigDecimal;
+
 public record ProdutoDTO(
 
         @NotBlank(message = "O nome da produto deve ser informado.")
@@ -36,6 +38,12 @@ public record ProdutoDTO(
 
         @NotNull(message = "O preço da produto deve ser informado.")
         @Positive(message = "O preço deve ser um valor positivo.")
-        float preco) {
+        BigDecimal preco,
+
+        @NotNull(message = "O estoque da produto deve ser informado.")
+        @Positive(message = "O estoque deve ser um valor positivo.")
+        Integer estoque
+        )
+{
 
 }

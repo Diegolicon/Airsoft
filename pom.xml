@@ -64,6 +64,11 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
         </dependency>
+        <!-- Dependência para o banco de dados em memória para testes -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
@@ -83,13 +88,12 @@
             <version>2.2</version> <!-- Versão recomendada -->
             <scope>test</scope>
         </dependency>
-
-        <!-- Dependência para o banco de dados em memória para testes -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-h2</artifactId>
-            <scope>test</scope>
+            <artifactId>quarkus-hibernate-orm-rest-data-panache</artifactId>
         </dependency>
+
+
     </dependencies>
 
     <build>

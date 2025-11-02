@@ -1,14 +1,32 @@
 package com.example.repository;
 
 import com.example.model.Endereco;
+import com.example.model.Pessoa;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
 
+/*
+ * Repositório para Endereco, seguindo o padrão da "classe"
+ * que implementa PanacheRepository.
+ */
 @ApplicationScoped
 public class EnderecoRepository implements PanacheRepository<Endereco> {
 
-    public Endereco findBySigla(String cep) {
-        return find("SELECT e FROM Endereco e WHERE e.cep = ?1 ", cep).firstResult();
+
+    public List<Endereco> findByPessoa(Pessoa pessoa) {
+        // "FROM Endereco WHERE pessoa = ?1"
+        return find("pessoa", pessoa).list();
     }
 
+
+    public List<Endereco> findByPessoaId(Long pessoaId) {
+        // "FROM Endereco WHERE pessoa.id = ?1"
+        return find("pessoa.id", pessoaId).list();
+    }
+
+    public List<Endereco> findByCep(String cep) {
+        // "FROM Endereco WHERE cep = ?1"
+        return find("cep", cep).list();
+    }
 }

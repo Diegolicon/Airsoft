@@ -1,65 +1,76 @@
 package com.example.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Pessoa extends IdentidadePadrao{
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Pessoa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pessoa_gen")
+    @SequenceGenerator(name = "pessoa_gen", sequenceName = "pessoa_seq", allocationSize = 1)
     private Long id;
-
-    private String nome;
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "id_endereco")
-    private Endereco endereco;
+    /*
+     * CascadeType.ALL: Se deletarmos a Pessoa, os telefones/endereços
+     * associados a ela serão deletados juntos.
+     * FetchType.LAZY: Só carrega a lista do banco quando chamarmos getTelefones().
+     */
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Telefone> telefones = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "id_telefone")
-    private Telefone telefone;
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Endereco> enderecos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
+    private List<Pedido> pedidos = new ArrayList<>();
+
+
+
+    public abstract String getNome();
 
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public Telefone getTelefone() {
-        return telefone;
+    public List<Telefone> getTelefones() {
+        return telefones;
+    }
+    public void setTelefones(List<Telefone> telefones) {
+        this.telefones = telefones;
+    }
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
     }
 
-    public void setTelefone(Telefone telefone) {
-        this.telefone = telefone;
+    public List<Pedido> getPedidos() {
+        return pedidos;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
     }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
 }
-

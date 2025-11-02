@@ -1,34 +1,38 @@
 package com.example.model;
 
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
-import jakarta.persistence.*;
-
 @Entity
-public class Pedido extends IdentidadePadrao {
+public class Pedido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double valorTotal;
-    private String status;
+    private LocalDate dataPedido;
 
-    @OneToMany(mappedBy = "id")
+    private String status; // Ex: PROCESSANDO, ENVIADO, CANCELADO
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente cliente;
-
-    private Double CalcularTotal(){
-        if (itens!=null) {
-            for (ItemPedido i : itens) {     
-                valorTotal += i.getSubtotal();  
-            }     
-        } return valorTotal; 
-    } 
 
     public Long getId() {
         return id;
@@ -38,12 +42,12 @@ public class Pedido extends IdentidadePadrao {
         this.id = id;
     }
 
-    public Double getValorTotal() {
-        return valorTotal;
+    public LocalDate getDataPedido() {
+        return dataPedido;
     }
 
-    public void setValorTotal(Double valorTotal) {
-        this.valorTotal = valorTotal;
+    public void setDataPedido(LocalDate dataPedido) {
+        this.dataPedido = dataPedido;
     }
 
     public String getStatus() {
@@ -54,11 +58,19 @@ public class Pedido extends IdentidadePadrao {
         this.status = status;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Pessoa getPessoa() {
+        return pessoa;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public List<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens;
     }
 }

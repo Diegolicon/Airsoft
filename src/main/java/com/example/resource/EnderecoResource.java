@@ -4,7 +4,9 @@ import com.example.DTO.EnderecoDTO;
 import com.example.DTO.EnderecoResponseDTO;
 import com.example.service.EnderecoService;
 
+import com.example.service.PessoaService;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -17,16 +19,15 @@ import java.util.List;
 public class EnderecoResource {
 
     @Inject
+    PessoaService pessoaService;
+
+    @Inject
     EnderecoService enderecoService;
 
-    @POST
-    public Response create(EnderecoDTO enderecoDTO) {
-        EnderecoResponseDTO createdEndereco = enderecoService.create(enderecoDTO);
-        return Response.status(Response.Status.CREATED).entity(createdEndereco).build();
-    }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{id}") // Endpoint: PUT /enderecos/1
+    @Transactional
     public Response update(@PathParam("id") Long id, EnderecoDTO enderecoDTO) {
         enderecoService.update(id, enderecoDTO);
         return Response.status(Response.Status.NO_CONTENT).build();
@@ -62,7 +63,7 @@ public class EnderecoResource {
     @GET
     @Path("/cep/{cep}")
     public Response getByCep(@PathParam("cep") String cep) {
-        EnderecoResponseDTO endereco = enderecoService.findByCep(cep);
+        List<EnderecoResponseDTO> endereco = enderecoService.findByCep(cep);
         return endereco != null ? Response.ok(endereco).build() : Response.status(Response.Status.NOT_FOUND).build();
     }
 }

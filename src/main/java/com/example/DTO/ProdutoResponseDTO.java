@@ -2,6 +2,8 @@ package com.example.DTO;
 
 import com.example.model.Produto;
 
+import java.math.BigDecimal;
+
 public record ProdutoResponseDTO(
         Long id,
         String nome,
@@ -9,7 +11,8 @@ public record ProdutoResponseDTO(
         String tipo,
         String sistema,
         String material,
-        float preco
+        BigDecimal preco,
+        Integer estoque
 ) {
     public static ProdutoResponseDTO valueOf(Produto produto) {
         if (produto == null)
@@ -21,7 +24,8 @@ public record ProdutoResponseDTO(
                 produto.getTipo(),
                 produto.getSistema(),
                 produto.getMaterial(),
-                produto.getPreco()
+                produto.getPreco(),
+                produto.getEstoque()
         );
     }
 }

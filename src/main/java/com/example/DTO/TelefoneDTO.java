@@ -13,6 +13,9 @@ public record TelefoneDTO(
         @NotBlank(message = "O número de telefone deve ser informado.")
         @Size(min = 8, max = 9, message = "O número de telefone deve ter entre 8 e 9 dígitos.")
         @Pattern(regexp = "[0-9]+", message = "O número de telefone deve conter apenas números.")
-        String numero
+        String numero,
+
+        @NotBlank(message = "O tipo deve ser informado.")
+        String tipo
 ) {
 }

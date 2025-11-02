@@ -1,20 +1,34 @@
 package com.example.DTO;
 
 import com.example.model.Pedido;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public record PedidoResponseDTO(
         Long id,
-        double valorTotal,
+        LocalDate dataPedido,
         String status,
-        Long clienteId) {
-
+        PessoaResponseDTO cliente,
+        List<ItemResponseDTO> itens
+) {
     public static PedidoResponseDTO valueOf(Pedido pedido) {
         if (pedido == null)
             return null;
+
+        // Converte a lista de entidades ItemPedido em uma lista de DTOs
+        List<ItemResponseDTO> listaItensDTO = pedido.getItens()
+                .stream()
+                .map(ItemResponseDTO::valueOf) // (item) -> ItemPedidoResponseDTO.valueOf(item)
+                .collect(Collectors.toList());
+
         return new PedidoResponseDTO(
                 pedido.getId(),
-                pedido.getValorTotal(),
+                pedido.getDataPedido(),
                 pedido.getStatus(),
-                pedido.getCliente().getId());
+                PessoaResponseDTO.valueOf(pedido.getPessoa()),
+                listaItensDTO
+        );
     }
 }

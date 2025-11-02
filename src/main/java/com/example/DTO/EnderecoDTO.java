@@ -1,9 +1,14 @@
 package com.example.DTO;
 
+import com.example.model.Pessoa;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record EnderecoDTO(
+
+        @NotBlank(message = "O CEP deve ser informado.")
+        @Size(max = 9, message = "O CEP deve ter no máximo 9 caracteres.")
+        String cep,
 
         @NotBlank(message = "O logradouro deve ser informado.")
         @Size(max = 100, message = "O logradouro deve ter no máximo 100 caracteres.")
@@ -26,11 +31,10 @@ public record EnderecoDTO(
 
         @NotBlank(message = "O estado deve ser informado.")
         @Size(max = 2, min = 2, message = "O estado deve conter 2 caracteres (UF).")
-        String estado,
+        String estado
 
-        @NotBlank(message = "O CEP deve ser informado.")
-        @Size(max = 9, message = "O CEP deve ter no máximo 9 caracteres.")
-        String cep) {
+
+        ) {
 
 }
 

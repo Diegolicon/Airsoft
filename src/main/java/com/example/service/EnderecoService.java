@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface EnderecoService {
 
-    EnderecoResponseDTO create(EnderecoDTO enderecoDTO);
+    EnderecoResponseDTO create(Long pessoaId, EnderecoDTO dto);;
 
-    void update(Long id, EnderecoDTO enderecoDTO);
+    EnderecoResponseDTO update(Long enderecoId, EnderecoDTO dto);
 
     void delete(Long id);
 
@@ -19,5 +19,5 @@ public interface EnderecoService {
 
     List<EnderecoResponseDTO> findByCidade(String cidade);
 
-    EnderecoResponseDTO findByCep(String cep);
+    List<EnderecoResponseDTO> findByCep(String cep);
 }
