@@ -26,7 +26,7 @@ public class EnderecoResource {
 
 
     @PUT
-    @Path("/{id}") // Endpoint: PUT /enderecos/1
+    @Path("/{id}") 
     @Transactional
     public Response update(@PathParam("id") Long id, EnderecoDTO enderecoDTO) {
         enderecoService.update(id, enderecoDTO);

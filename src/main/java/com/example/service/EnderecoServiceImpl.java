@@ -100,7 +100,6 @@ public class EnderecoServiceImpl implements EnderecoService {
 
     @Override
     public List<EnderecoResponseDTO> findByCep(String cep) {
-        // 1. Chama o novo método do repositório
         List<Endereco> listaEntidades = enderecoRepository.findByCep(cep);
 
         // 2. Converte a lista de Entidades para uma lista de DTOs

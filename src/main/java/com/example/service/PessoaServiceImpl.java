@@ -52,22 +52,16 @@ public class PessoaServiceImpl implements PessoaService {
             throw new BadRequestException("Já existe uma Pessoa Jurídica com este CNPJ.");
         }
 
-        // Mapeamento: DTO -> Entidade
+
         PessoaJuridica pj = new PessoaJuridica();
         pj.setRazaoSocial(dto.razaoSocial());
         pj.setEmail(dto.email());
         pj.setCnpj(dto.cnpj());
 
-        // Persistência
         pessoaRepository.persist(pj);
 
         return PessoaResponseDTO.valueOf(pj);
     }
-
-
-    // Em: service/PessoaServiceImpl.java
-
-    // --- Métodos de Leitura (READ) - CORRIGIDOS ---
 
     @Override
     public List<PessoaResponseDTO> getAllPessoas() {
@@ -80,13 +74,11 @@ public class PessoaServiceImpl implements PessoaService {
     public PessoaResponseDTO getPessoaById(Long id) {
         Pessoa pessoa = pessoaRepository.findById(id);
 
-        // MUDANÇA: Retorna null se não encontrar (para o teste 'assertNull' funcionar)
         return (pessoa == null) ? null : PessoaResponseDTO.valueOf(pessoa);
     }
 
     @Override
     public PessoaResponseDTO getPessoaByCpf(String cpf) {
-        // MUDANÇA: Retorna null se o Optional estiver vazio
         return pessoaRepository.findByCpf(cpf)
                 .map(PessoaResponseDTO::valueOf)
                 .orElse(null);
@@ -94,30 +86,23 @@ public class PessoaServiceImpl implements PessoaService {
 
     @Override
     public PessoaResponseDTO getPessoaByCnpj(String cnpj) {
-        // MUDANÇA: Retorna null se o Optional estiver vazio
         return pessoaRepository.findByCnpj(cnpj)
                 .map(PessoaResponseDTO::valueOf)
                 .orElse(null);
     }
 
-    // ... (Os métodos create, update e delete continuam iguais) ...
-
-
     @Override
     @Transactional
     public PessoaResponseDTO updatePessoaFisica(Long id, PessoaFisicaDTO dto) {
-        // 1. Encontra a entidade no banco
         Pessoa pessoa = pessoaRepository.findById(id);
         if (pessoa == null) {
             throw new NotFoundException("Pessoa não encontrada com o ID: " + id);
         }
 
-        // 2. Valida se a Pessoa encontrada é do tipo correto
         if (!(pessoa instanceof PessoaFisica pf)) {
             throw new BadRequestException("A Pessoa com ID " + id + " não é uma Pessoa Física.");
         }
 
-        // 3. Validação de Negócio: O novo CPF já pertence a OUTRA pessoa?
         Optional<PessoaFisica> pfExistente = pessoaRepository.findByCpf(dto.cpf());
         if (pfExistente.isPresent() && !pfExistente.get().getId().equals(id)) {
             throw new BadRequestException("O CPF " + dto.cpf() + " já está em uso por outra Pessoa.");

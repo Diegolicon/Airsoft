@@ -38,7 +38,7 @@ public class TelefoneResource {
     }
 
     @PUT
-    @Path("/{id}") // Endpoint: PUT /telefones/1
+    @Path("/{id}")
     @Transactional
     public Response updateTelefone(
             @PathParam("id") Long id,

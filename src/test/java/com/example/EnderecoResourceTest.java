@@ -11,6 +11,7 @@ import com.example.DTO.PessoaResponseDTO;
 import com.example.service.EnderecoService;
 import com.example.service.PessoaService;
 
+import jakarta.transaction.Transactional;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,27 +30,17 @@ public class EnderecoResourceTest {
     EnderecoService enderecoService;
 
     @Inject
-    PessoaService pessoaService; // Necessário para criar a pessoa
+    PessoaService pessoaService;
 
-    private PessoaResponseDTO pessoaTest; // Pessoa usada nos testes
+    private PessoaResponseDTO pessoaTest;
 
-    /**
-     * Helper: Cria uma PessoaFisica antes de cada teste.
-     * Endereços precisam de uma Pessoa para existir.
-     */
     @BeforeEach
-    @jakarta.transaction.Transactional // Necessário para o 'create' do service
+    @Transactional
     void setUp() {
-        // Limpa (opcional, mas bom) e cria uma pessoa de teste
-        // Nota: Este é um setup simples. Em testes maiores,
-        // é melhor usar o @TestTransaction
-
-        // Tentativa de criar uma pessoa única para os testes
-        // (Testes rodam em paralelo, então é melhor criar uma nova sempre)
         PessoaFisicaDTO dto = new PessoaFisicaDTO(
                 "Pessoa Endereco Teste",
                 "pessoa.endereco@teste.com",
-                "99988877766", // Um CPF único para este teste
+                "99988877766", 
                 LocalDate.of(1995, 1, 1)
         );
 
@@ -70,7 +61,6 @@ public class EnderecoResourceTest {
                 .contentType(ContentType.JSON)
                 .body(dto)
                 .when()
-                // Usamos o ID da pessoa criada no setup
                 .post("/pessoas/" + pessoaTest.id() + "/enderecos")
                 .then()
                 .statusCode(201) // 201 Created
@@ -86,25 +76,20 @@ public class EnderecoResourceTest {
 
     @Test
     public void alterarEnderecoTest() {
-        // 1. Setup: Criar um endereço
         EnderecoDTO dtoOriginal = new EnderecoDTO("77006050","Quadra ARNE 12 Avenida LO 4","11","complemento","Bairro","Palmas","TO");
         EnderecoResponseDTO enderecoCriado = enderecoService.create(pessoaTest.id(),dtoOriginal);
         assertNotNull(enderecoCriado);
 
-        // 2. DTO de Update
         EnderecoDTO dtoUpdate = new EnderecoDTO("77000000","Quadra ARNE 12 Avenida LO 4","00","complemento","Bairro","Araguaina","TO");
 
-        // 3. Executar API
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(dtoUpdate)
                 .when()
-                // Usamos o endpoint direto de endereço
                 .put("/enderecos/" + enderecoCriado.id())
                 .then()
-                .statusCode(204); // 204 No Content
+                .statusCode(204);
 
-        // 4. Verificação
         EnderecoResponseDTO enderecoAlterado = enderecoService.findById(enderecoCriado.id());
         assertEquals(dtoUpdate.cep(), enderecoAlterado.cep());
         assertEquals(dtoUpdate.logradouro(), enderecoAlterado.logradouro());
@@ -112,20 +97,17 @@ public class EnderecoResourceTest {
 
     @Test
     public void apagarEnderecoTest() {
-        // 1. Setup: Criar um endereço
         EnderecoDTO dto = new EnderecoDTO("77006050","Quadra ARNE 12 Avenida LO 4","11","complemento","Bairro","Palmas","TO");
         EnderecoResponseDTO enderecoCriado = enderecoService.create(pessoaTest.id(),dto);
         Long idParaApagar = enderecoCriado.id();
         assertNotNull(enderecoCriado);
 
-        // 2. Executar API
         RestAssured.given()
                 .when()
                 .delete("/enderecos/" + idParaApagar)
                 .then()
                 .statusCode(204);
 
-        // 3. Verificação (padrão do professor)
         EnderecoResponseDTO enderecoApagado = enderecoService.findById(idParaApagar);
         assertNull(enderecoApagado);
     }

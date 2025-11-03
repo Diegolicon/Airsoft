@@ -47,7 +47,7 @@ public record PessoaResponseDTO(
                     pf.getNome(), // Vem do método polimórfico
                     pf.getCpf(),
                     pf.getDataNascimento(),
-                    null, // razaoSocial// nomeFantasia
+                    null, // razaoSocial
                     null  // cnpj
             );
         } else if (pessoa instanceof PessoaJuridica pj) {
@@ -66,7 +66,7 @@ public record PessoaResponseDTO(
             );
         }
 
-        
+
         return null;
     }
 }

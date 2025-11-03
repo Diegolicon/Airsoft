@@ -1,13 +1,13 @@
-package com.example; // ou seu pacote de resource
+package com.example;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertNotNull; // Útil
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.example.DTO.PessoaFisicaDTO;
 import com.example.DTO.PessoaJuridicaDTO;
 import com.example.DTO.PessoaResponseDTO;
-import com.example.service.PessoaService; // Importar o SEU service
+import com.example.service.PessoaService;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import java.time.LocalDate;
 public class PessoaResourceTest {
 
     @Inject
-    PessoaService pessoaService; // Injeta o service, como no exemplo
+    PessoaService pessoaService;
 
     @Test
     public void buscarTodosTest() {
@@ -63,7 +63,7 @@ public class PessoaResourceTest {
         PessoaJuridicaDTO dto = new PessoaJuridicaDTO(
                 "Razao Social Teste PJ",
                 "pj.teste@email.com",
-                "11222333000144" // 14 dígitos
+                "11222333000144"
         );
 
         RestAssured.given()
@@ -82,7 +82,7 @@ public class PessoaResourceTest {
 
     @Test
     public void alterarPessoaFisicaTest() {
-        // 1. Setup: Criar uma pessoa física via service
+
         PessoaFisicaDTO dtoOriginal = new PessoaFisicaDTO(
                 "PF Original",
                 "original.pf@email.com",
@@ -90,9 +90,8 @@ public class PessoaResourceTest {
                 LocalDate.of(1980, 5, 10)
         );
         PessoaResponseDTO responseCriada = pessoaService.createPessoaFisica(dtoOriginal);
-        assertNotNull(responseCriada); // Garante que foi criada
+        assertNotNull(responseCriada);
 
-        // 2. Preparar o DTO de update
         PessoaFisicaDTO dtoUpdate = new PessoaFisicaDTO(
                 "PF Alterado",
                 "alterado.pf@email.com",
@@ -100,16 +99,14 @@ public class PessoaResourceTest {
                 LocalDate.of(1985, 6, 12)
         );
 
-        // 3. Executar a chamada de API
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(dtoUpdate)
                 .when()
                 .put("/pessoas/fisica/" + responseCriada.id())
                 .then()
-                .statusCode(204); // 204 No Content
+                .statusCode(204);
 
-        // 4. Verificação: Buscar via service e comparar
         PessoaResponseDTO responseAlterada = pessoaService.getPessoaById(responseCriada.id());
         assertEquals(dtoUpdate.nome(), responseAlterada.nome());
         assertEquals(dtoUpdate.email(), responseAlterada.email());
@@ -134,7 +131,7 @@ public class PessoaResourceTest {
                 .when()
                 .delete("/pessoas/" + idParaApagar)
                 .then()
-                .statusCode(204); // 204 No Content
+                .statusCode(204);
 
 
         PessoaResponseDTO responseApagada = pessoaService.getPessoaById(idParaApagar);

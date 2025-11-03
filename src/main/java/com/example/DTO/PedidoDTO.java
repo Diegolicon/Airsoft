@@ -19,7 +19,6 @@ public record PedidoDTO(
         @Valid // Valida cada ItemPedidoDTO dentro da lista
         List<ItemPedidoDTO> itens,
 
-        @NotBlank(message = "A data deve ser informada.")
         LocalDate dataPedido,
 
         @NotBlank(message = "O status do produto deve ser informado.")

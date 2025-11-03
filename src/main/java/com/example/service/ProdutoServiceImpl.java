@@ -27,7 +27,8 @@ public class ProdutoServiceImpl implements ProdutoService {
         produto.setTipo(dto.tipo());
         produto.setSistema(dto.sistema());
         produto.setMaterial(dto.material());
-        produto.setPreco(dto.preco()); // Adicionado o preço
+        produto.setPreco(dto.preco());
+        produto.setEstoque(dto.estoque());
 
         produtoRepository.persist(produto);
         return ProdutoResponseDTO.valueOf(produto);
@@ -42,7 +43,8 @@ public class ProdutoServiceImpl implements ProdutoService {
         produto.setTipo(dto.tipo());
         produto.setSistema(dto.sistema());
         produto.setMaterial(dto.material());
-        produto.setPreco(dto.preco()); // Adicionado o preço
+        produto.setPreco(dto.preco());
+        produto.setEstoque(dto.estoque());
     }
 
     @Override
@@ -58,7 +60,6 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public ProdutoResponseDTO findByNome(String nome) {
-        // Retorna nulo se não encontrar
         return produtoRepository.findByNome(nome)
                 .map(ProdutoResponseDTO::valueOf)
                 .orElse(null);

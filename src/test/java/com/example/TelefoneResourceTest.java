@@ -30,17 +30,16 @@ public class TelefoneResourceTest {
     TelefoneService telefoneService;
 
     @Inject
-    PessoaService pessoaService; // Necessário para criar a pessoa
-    private PessoaResponseDTO pessoaTest; // Pessoa usada nos testes
+    PessoaService pessoaService;
+    private PessoaResponseDTO pessoaTest;
 
     @BeforeEach
     @Transactional
     void setUp() {
-        // Cria uma pessoa de teste
         PessoaFisicaDTO dto = new PessoaFisicaDTO(
                 "Pessoa Telefone Teste",
                 "pessoa.telefone@teste.com",
-                "88877766655", // Um CPF único para este teste
+                "88877766655",
                 LocalDate.of(1996, 1, 1)
         );
 
@@ -62,7 +61,7 @@ public class TelefoneResourceTest {
                 .when()
                 .post("/pessoas/" + pessoaTest.id() + "/telefones")
                 .then()
-                .statusCode(201) // 201 Created
+                .statusCode(201)
                 .body("id", CoreMatchers.notNullValue())
                 .body("ddd", CoreMatchers.is("63"))
                 .body("numero", CoreMatchers.is("987654321"))
@@ -71,25 +70,20 @@ public class TelefoneResourceTest {
 
     @Test
     public void alterarTelefoneTest() {
-        // 1. Setup: Criar um telefone via service
         TelefoneDTO dtoOriginal = new TelefoneDTO("11", "111111111", "CASA");
         TelefoneResponseDTO telefoneCriado = telefoneService.create(pessoaTest.id(), dtoOriginal);
         assertNotNull(telefoneCriado);
 
-        // 2. DTO de Update
         TelefoneDTO dtoUpdate = new TelefoneDTO("21", "222222222", "TRABALHO");
 
-        // 3. Executar API
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(dtoUpdate)
                 .when()
-                // Usamos o endpoint direto de telefone
                 .put("/telefones/" + telefoneCriado.id())
                 .then()
-                .statusCode(204); // 204 No Content
+                .statusCode(204);
 
-        // 4. Verificação
         TelefoneResponseDTO telefoneAlterado = telefoneService.findById(telefoneCriado.id());
         assertEquals(dtoUpdate.ddd(), telefoneAlterado.ddd());
         assertEquals(dtoUpdate.numero(), telefoneAlterado.numero());
@@ -98,20 +92,17 @@ public class TelefoneResourceTest {
 
     @Test
     public void apagarTelefoneTest() {
-        // 1. Setup: Criar um telefone
         TelefoneDTO dto = new TelefoneDTO("99", "999999999", "APAGAR");
         TelefoneResponseDTO telefoneCriado = telefoneService.create(pessoaTest.id(), dto);
         Long idParaApagar = telefoneCriado.id();
         assertNotNull(telefoneCriado);
 
-        // 2. Executar API
         RestAssured.given()
                 .when()
                 .delete("/telefones/" + idParaApagar)
                 .then()
                 .statusCode(204);
 
-        // 3. Verificação
         TelefoneResponseDTO telefoneApagado = telefoneService.findById(idParaApagar);
         assertNull(telefoneApagado);
     }

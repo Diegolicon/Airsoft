@@ -47,7 +47,7 @@ public class TelefoneServiceImpl implements TelefoneService {
     public TelefoneResponseDTO findById(Long id) {
         Telefone telefone = telefoneRepository.findById(id);
         if (telefone == null) {
-            return null; // Retorna null se não encontrar, o Resource trata o 404
+            return null; 
         }
         return TelefoneResponseDTO.valueOf(telefone);
     }

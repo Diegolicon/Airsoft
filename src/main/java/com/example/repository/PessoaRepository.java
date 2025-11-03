@@ -20,35 +20,14 @@ public class PessoaRepository implements PanacheRepository<Pessoa> {
         return find("cpf", cpf).firstResultOptional();
     }
 
-    /**
-     * Busca uma PessoaJuridica pelo seu CNPJ.
-     */
     public Optional<PessoaJuridica> findByCnpj(String cnpj) {
         // "FROM PessoaJuridica WHERE cnpj = ?1"
         return find("cnpj", cnpj).firstResultOptional();
     }
 
-    /**
-     * Busca qualquer Pessoa (PF ou PJ) pelo email.
-     */
     public Optional<Pessoa> findByEmail(String email) {
         // "FROM Pessoa WHERE email = ?1"
         return find("email", email).firstResultOptional();
     }
 
-    public Optional<PessoaFisica> findByCpfExceptId(String cpf, Long id) {
-        if (id == null) {
-            return findByCpf(cpf); // Reusa o método acima
-        }
-        // Query: "FROM PessoaFisica WHERE cpf = ?1 AND id != ?2"
-        return find("cpf = ?1 AND id != ?2", cpf, id).firstResultOptional();
-    }
-
-    public Optional<PessoaJuridica> findByCnpjExceptId(String cnpj, Long id) {
-        if (id == null) {
-            return findByCnpj(cnpj);
-        }
-        // Query: "FROM PessoaJuridica WHERE cnpj = ?1 AND id != ?2"
-        return find("cnpj = ?1 AND id != ?2", cnpj, id).firstResultOptional();
-    }
 }

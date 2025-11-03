@@ -6,10 +6,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 
-/*
- * Repositório para Endereco, seguindo o padrão da "classe"
- * que implementa PanacheRepository.
- */
+
 @ApplicationScoped
 public class EnderecoRepository implements PanacheRepository<Endereco> {
 

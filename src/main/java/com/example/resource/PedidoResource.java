@@ -26,8 +26,14 @@ public class PedidoResource {
 
     @GET
     @Path("/{id}")
-    public PedidoResponseDTO getPedidoById(@PathParam("id") Long id) {
-        return pedidoService.getPedidoById(id);
+    public Response getPedidoById(@PathParam("id") Long id) {
+        PedidoResponseDTO pedido = pedidoService.getPedidoById(id);
+        
+        if (pedido == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.ok(pedido).build();
     }
 
     @POST
@@ -40,8 +46,12 @@ public class PedidoResource {
     @PUT
     @Path("/{id}")
     @Transactional
-    public PedidoResponseDTO updatePedido(@PathParam("id") Long id, @Valid PedidoDTO pedidoDTO) {
-        return pedidoService.updatePedido(id, pedidoDTO);
+    public Response updatePedido(
+            @PathParam("id") Long id,
+            @Valid PedidoDTO dto) {
+
+        pedidoService.updatePedido(id, dto);
+        return Response.noContent().build();
     }
 
     @DELETE
