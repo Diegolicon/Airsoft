@@ -11,6 +11,7 @@ import com.example.DTO.PessoaFisicaDTO;
 import com.example.DTO.PessoaResponseDTO;
 import com.example.DTO.ProdutoDTO;
 import com.example.DTO.ProdutoResponseDTO;
+import com.example.DTO.UsuarioResponseDTO;
 import com.example.service.PedidoService;
 import com.example.service.PessoaService;
 import com.example.service.ProdutoService;
@@ -32,12 +33,14 @@ import java.util.List;
 
 @QuarkusTest
 public class PedidoResourceTest {
+    String login = null;
 
     @Inject
     PedidoService pedidoService;
 
     @Inject
     PessoaService pessoaService;
+
     @Inject
     ProdutoService produtoService;
 
@@ -45,6 +48,7 @@ public class PedidoResourceTest {
     private PessoaResponseDTO pessoaTest;
     private ProdutoResponseDTO produtoTest;
     private ProdutoResponseDTO produtoTest2;
+    private UsuarioResponseDTO usuariotest;
 
     @BeforeEach
     @Transactional
@@ -98,7 +102,7 @@ public class PedidoResourceTest {
                 .when()
                 .post("/pedidos")
                 .then()
-                .statusCode(201) // 201 Created
+                .statusCode(201)
                 .body("id", CoreMatchers.notNullValue())
                 .body("cliente.id", CoreMatchers.is(pessoaTest.id().intValue()))
                 .body("itens.size()", CoreMatchers.is(1))
@@ -110,8 +114,8 @@ public class PedidoResourceTest {
     @Test
     public void alterarPedidoTest() {
         ItemPedidoDTO itemOriginalDto = new ItemPedidoDTO(produtoTest.id(), 2);
-        PedidoDTO pedidoOriginalDto = new PedidoDTO(pessoaTest.id(), List.of(itemOriginalDto),LocalDate.now(),"PROCESSANDO");
-        PedidoResponseDTO pedidoCriado = pedidoService.createPedido(pedidoOriginalDto);
+        PedidoDTO pedidoOriginalDto = new PedidoDTO(pessoaTest.id(), List.of(itemOriginalDto),LocalDate.now(), login);
+        PedidoResponseDTO pedidoCriado = pedidoService.createPedido(pedidoOriginalDto, login);
         assertNotNull(pedidoCriado);
 
         ItemPedidoDTO itemUpdateDto = new ItemPedidoDTO(produtoTest2.id(), 10);
@@ -138,8 +142,8 @@ public class PedidoResourceTest {
     @Test
     public void apagarPedidoTest() {
         ItemPedidoDTO itemDto = new ItemPedidoDTO(produtoTest.id(), 1);
-        PedidoDTO pedidoDto = new PedidoDTO(pessoaTest.id(), List.of(itemDto),LocalDate.now(),"PROCESSANDO");
-        PedidoResponseDTO pedidoCriado = pedidoService.createPedido(pedidoDto);
+        PedidoDTO pedidoDto = new PedidoDTO(pessoaTest.id(), List.of(itemDto),LocalDate.now(),login);
+        PedidoResponseDTO pedidoCriado = pedidoService.createPedido(pedidoDto, login);
         Long idParaApagar = pedidoCriado.id();
         assertNotNull(pedidoCriado);
 
@@ -149,7 +153,9 @@ public class PedidoResourceTest {
                 .then()
                 .statusCode(204);
 
-        PedidoResponseDTO pedidoApagado = pedidoService.getPedidoById(idParaApagar);
-        assertNull(pedidoApagado);
+        org.junit.jupiter.api.Assertions.assertThrows(
+            jakarta.ws.rs.NotFoundException.class,
+            () -> pedidoService.getPedidoById(idParaApagar)
+        );
     }
 }

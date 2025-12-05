@@ -27,7 +27,7 @@ public class Pedido {
     private String status; // Ex: PROCESSANDO, ENVIADO, CANCELADO
 
      @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -31,7 +31,7 @@ public abstract class Pessoa {
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Telefone> telefones = new ArrayList<>();
 
-    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Endereco> enderecos = new ArrayList<>();
 
     @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)

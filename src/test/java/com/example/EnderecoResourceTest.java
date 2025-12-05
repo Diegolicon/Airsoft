@@ -76,11 +76,11 @@ public class EnderecoResourceTest {
 
     @Test
     public void alterarEnderecoTest() {
-        EnderecoDTO dtoOriginal = new EnderecoDTO("77006050","Quadra ARNE 12 Avenida LO 4","11","complemento","Bairro","Palmas","TO");
+        EnderecoDTO dtoOriginal = new EnderecoDTO("77006051","Quadra ARNE 12 Avenida LO 4","11","complemento","Bairro","Palmas","TO");
         EnderecoResponseDTO enderecoCriado = enderecoService.create(pessoaTest.id(),dtoOriginal);
         assertNotNull(enderecoCriado);
 
-        EnderecoDTO dtoUpdate = new EnderecoDTO("77000000","Quadra ARNE 12 Avenida LO 4","00","complemento","Bairro","Araguaina","TO");
+        EnderecoDTO dtoUpdate = new EnderecoDTO("77000000","Quadra ARSE 12 Avenida LO 4","00","complemento","Bairro","Araguaina","TO");
 
         RestAssured.given()
                 .contentType(ContentType.JSON)
@@ -97,7 +97,7 @@ public class EnderecoResourceTest {
 
     @Test
     public void apagarEnderecoTest() {
-        EnderecoDTO dto = new EnderecoDTO("77006050","Quadra ARNE 12 Avenida LO 4","11","complemento","Bairro","Palmas","TO");
+        EnderecoDTO dto = new EnderecoDTO("77006052","Quadra ARNE 12 Avenida LO 4","11","complemento","Bairro","Palmas","TO");
         EnderecoResponseDTO enderecoCriado = enderecoService.create(pessoaTest.id(),dto);
         Long idParaApagar = enderecoCriado.id();
         assertNotNull(enderecoCriado);

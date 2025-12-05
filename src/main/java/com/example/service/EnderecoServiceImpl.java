@@ -72,12 +72,29 @@ public class EnderecoServiceImpl implements EnderecoService {
     @Override
     @Transactional
     public void delete(Long id) {
-        enderecoRepository.deleteById(id);
+        Endereco entity = enderecoRepository.findById(id);
+
+        if (entity != null) {
+        // PASSO CRÍTICO: Remova o endereço da lista da Pessoa.
+        // Isso é necessário porque a exclusão direta pode ser revertida
+        // pelo Hibernate ao sincronizar o relacionamento bidirecional.
+        Pessoa pessoa = entity.getPessoa(); // Obter a Pessoa associada
+            if (pessoa != null) {
+                pessoa.getEnderecos().remove(entity); // Remove da lista da Pessoa
+            }
+
+                // Apaga a entidade do banco de dados
+                enderecoRepository.delete(entity);
+            
+            } else {
+                // Opcional: throw new NotFoundException("Endereço não encontrado.");
+            }
+
     }
 
     @Override
     public EnderecoResponseDTO findById(Long id) {
-        Endereco endereco = enderecoRepository.findById(id);
+        Endereco endereco = enderecoRepository.find("id", id).firstResult();
         return EnderecoResponseDTO.valueOf(endereco);
     }
 

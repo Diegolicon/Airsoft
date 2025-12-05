@@ -44,7 +44,6 @@ public class PedidoResource {
 
     @POST
     @Transactional
-    @RolesAllowed("USER")
     public Response createPedido(@Valid PedidoDTO pedidoDTO) {
         String login = jwt.getSubject();
         PedidoResponseDTO createdPedido = pedidoService.createPedido(pedidoDTO, login);
