@@ -4,6 +4,7 @@ import com.example.DTO.EnderecoDTO;
 import com.example.DTO.EnderecoResponseDTO;
 import com.example.service.EnderecoService;
 
+import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import com.example.service.PessoaService;
 import jakarta.inject.Inject;
@@ -17,6 +18,7 @@ import java.util.List;
 @Path("/enderecos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Authenticated
 public class EnderecoResource {
 
     @Inject

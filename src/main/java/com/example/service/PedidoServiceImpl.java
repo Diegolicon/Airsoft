@@ -7,9 +7,11 @@ import com.example.model.ItemPedido;
 import com.example.model.Pedido;
 import com.example.model.Pessoa;
 import com.example.model.Produto;
+import com.example.model.Usuario;
 import com.example.repository.PedidoRepository;
 import com.example.repository.PessoaRepository;
 import com.example.repository.ProdutoRepository;
+import com.example.repository.UsuarioRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -18,6 +20,7 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,52 +37,8 @@ public class PedidoServiceImpl implements PedidoService {
     @Inject
     PessoaRepository pessoaRepository;
 
-
-    @Override
-    @Transactional
-    public PedidoResponseDTO createPedido(PedidoDTO pedidoDTO) {
-
-        Pedido pedido = new Pedido();
-
-
-        pedido.setDataPedido(LocalDate.now());
-        pedido.setStatus("PROCESSANDO");
-
-
-        Pessoa cliente = pessoaRepository.findById(pedidoDTO.pessoaId());
-        if (cliente == null) {
-            throw new NotFoundException("Cliente (Pessoa) não encontrado com o ID: " + pedidoDTO.pessoaId());
-        }
-        pedido.setPessoa(cliente);
-
-
-        List<ItemPedido> itens = new ArrayList<>();
-        for (ItemPedidoDTO itemDTO : pedidoDTO.itens()) {
-            Produto produto = produtoRepository.findById(itemDTO.produtoId());
-            if (produto == null) {
-                throw new NotFoundException("Produto não encontrado com o ID: " + itemDTO.produtoId());
-            }
-
-            int estoqueDisponivel = (produto.getEstoque() == null) ? 0 : produto.getEstoque();
-
-            if (estoqueDisponivel < itemDTO.quantidade()) {
-                throw new BadRequestException("Estoque insuficiente para o produto: " + produto.getNome());
-            }
-
-            ItemPedido item = new ItemPedido();
-            item.setProduto(produto);
-            item.setQuantidade(itemDTO.quantidade());
-            item.setPreco(produto.getPreco());
-            item.setPedido(pedido);
-            itens.add(item);
-        }
-
-        pedido.setItens(itens);
-
-        pedidoRepository.persist(pedido);
-
-        return PedidoResponseDTO.valueOf(pedido);
-    }
+    @Inject
+    UsuarioRepository usuarioRepository;
 
 
     @Override
@@ -93,7 +52,9 @@ public class PedidoServiceImpl implements PedidoService {
     public PedidoResponseDTO getPedidoById(Long id) {
         Pedido pedido = pedidoRepository.findById(id);
 
-        return (pedido == null) ? null : PedidoResponseDTO.valueOf(pedido);
+        if (pedido == null)
+            throw new NotFoundException("Pedido não encontrada.");
+        return PedidoResponseDTO.valueOf(pedido);
     }
 
     @Override
@@ -148,5 +109,35 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         pedidoRepository.delete(pedido);
+    }
+
+    @Override
+    @Transactional
+    public PedidoResponseDTO createPedido(PedidoDTO pedidoDTO, String login) {
+
+        Pedido entity = new Pedido();
+        entity.setDataPedido(LocalDate.now());
+        entity.setUsuario(usuarioRepository.findByLogin(login));
+
+
+        List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
+        for (ItemPedidoDTO itemDTO : pedidoDTO.itens()) {
+            ItemPedido ip = new ItemPedido();
+            ip.setPedido(entity);
+            itensPedido.add(ip);
+        }
+
+
+        entity.setItens(itensPedido);
+
+        pedidoRepository.persist(entity);
+
+        return PedidoResponseDTO.valueOf(entity);
+    }
+
+    @Override
+    public List<PedidoResponseDTO> findByUsuario(String login) {
+        Usuario usuario = usuarioRepository.findByLogin(login);
+        return pedidoRepository.findByUsuario(usuario).list().stream().map(e -> PedidoResponseDTO.valueOf(e)).toList();
     }
 }

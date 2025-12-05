@@ -1,8 +1,11 @@
 package com.example.resource;
 
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
 import com.example.DTO.PedidoDTO;
 import com.example.DTO.PedidoResponseDTO;
 import com.example.service.PedidoService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -18,6 +21,9 @@ public class PedidoResource {
 
     @Inject
     PedidoService pedidoService;
+
+    @Inject
+    JsonWebToken jwt;
 
     @GET
     public List<PedidoResponseDTO> getAllPedidos() {
@@ -39,8 +45,9 @@ public class PedidoResource {
     @POST
     @Transactional
     public Response createPedido(@Valid PedidoDTO pedidoDTO) {
-        PedidoResponseDTO createdPedido = pedidoService.createPedido(pedidoDTO);
-        return Response.status(Response.Status.CREATED).entity(createdPedido).build();
+        String login = jwt.getSubject();
+        PedidoResponseDTO createdPedido = pedidoService.createPedido(pedidoDTO, login);
+        return Response.status(201).entity(createdPedido).build();
     }
 
     @PUT
@@ -59,5 +66,16 @@ public class PedidoResource {
     @Transactional
     public void deletePedido(@PathParam("id") Long id) {
         pedidoService.deletePedido(id);
+    }
+
+    @POST
+    @RolesAllowed("USER")
+    public Response incluir(PedidoDTO dto) {
+        // obtendo o usuario do token
+        String login = jwt.getSubject();
+
+        PedidoResponseDTO retorno = pedidoService.createPedido(dto, login);
+
+        return Response.status(201).entity(retorno).build();
     }
 }
