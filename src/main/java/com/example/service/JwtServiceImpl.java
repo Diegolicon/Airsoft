@@ -1,12 +1,15 @@
 package com.example.service;
 
+import java.io.InputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger; // 👈 Import para o Logger
 
 import com.example.model.Perfil;
 import io.smallrye.jwt.build.Jwt;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped

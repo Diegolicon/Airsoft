@@ -6,10 +6,10 @@
 -- Usuário 1 (ADM) e Usuário 2 (USER)
 -- A senha '123456' está aqui representada por um HASH de exemplo.
 INSERT INTO Usuario (ID, NOME, LOGIN, SENHA, PERFIL)
-VALUES (101, 'Administrador Master', 'admin', '$2a$10$ExemploDeSenhaHashedAdmin123', 1);
+VALUES (101, 'Administrador Master', 'admin', '+RMra81+PVL2HQWuh7xAkSohHzzzq62hw4zuaEpFHXbE0+pX+fzwOpTqmmuDA19zusgadv4fnMnHqLd2S32aXQ==', 1);
 
 INSERT INTO Usuario (ID, NOME, LOGIN, SENHA, PERFIL)
-VALUES (102, 'Cliente Comum', 'usuario', '$2a$10$ExemploDeSenhaHashedUser4567', 2);
+VALUES (102, 'Cliente Comum', 'usuario', 'McObD7/8d3+QjETjhfgmD1fdPwO4jvolfzIrszGpZOOAVn4q7OPw2A/whB+yEkQvZC2OxX7ZXao6PHdgswUitw==', 2);
 
 ------------------------------------------------------------------------------------------------------------------------
 
