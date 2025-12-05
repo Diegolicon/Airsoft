@@ -4,6 +4,7 @@ import com.example.DTO.EnderecoDTO;
 import com.example.DTO.EnderecoResponseDTO;
 import com.example.service.EnderecoService;
 
+import jakarta.annotation.security.RolesAllowed;
 import com.example.service.PessoaService;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -48,6 +49,7 @@ public class EnderecoResource {
     }
 
     @GET
+    @RolesAllowed({"ADM","USER"})
     public Response getAll() {
         List<EnderecoResponseDTO> enderecos = enderecoService.findAll();
         return Response.ok(enderecos).build();
@@ -55,6 +57,7 @@ public class EnderecoResource {
 
     @GET
     @Path("/cidade/{cidade}")
+    @RolesAllowed("USER")
     public Response getByCidade(@PathParam("cidade") String cidade) {
         List<EnderecoResponseDTO> enderecos = enderecoService.findByCidade(cidade);
         return Response.ok(enderecos).build();
