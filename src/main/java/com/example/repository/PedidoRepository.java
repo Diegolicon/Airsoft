@@ -14,4 +14,11 @@ public class PedidoRepository implements PanacheRepository<Pedido> {
             return null;
         return find("usuario.id = ?1 ",  usuario.getId());
     }
+
+    public Pedido findByIdCompleto(Long id) {
+        return find("SELECT p FROM Pedido p " +
+                    "LEFT JOIN FETCH p.itens i " +
+                    "LEFT JOIN FETCH i.produto " +
+                    "WHERE p.id = ?1", id).firstResult();
+    }
 }

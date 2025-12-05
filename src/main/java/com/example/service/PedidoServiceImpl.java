@@ -50,7 +50,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public PedidoResponseDTO getPedidoById(Long id) {
-        Pedido pedido = pedidoRepository.findById(id);
+        Pedido pedido = pedidoRepository.findByIdCompleto(id);
 
         if (pedido == null)
             throw new NotFoundException("Pedido não encontrada.");
@@ -114,19 +114,40 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     @Transactional
     public PedidoResponseDTO createPedido(PedidoDTO pedidoDTO, String login) {
-
         Pedido entity = new Pedido();
         entity.setDataPedido(LocalDate.now());
+        entity.setStatus("PROCESSANDO"); // Definindo um status padrão ou pegando do DTO
+        
+        // 1. Busca e define o usuário
         entity.setUsuario(usuarioRepository.findByLogin(login));
 
+        // 2. Busca e define a Pessoa (Cliente) - ISSO ESTAVA FALTANDO
+        Pessoa cliente = pessoaRepository.findById(pedidoDTO.pessoaId());
+        if (cliente == null) {
+            throw new NotFoundException("Cliente não encontrado");
+        }
+        entity.setPessoa(cliente);
 
-        List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
+        // 3. Processa os itens corretamente
+        List<ItemPedido> itensPedido = new ArrayList<>();
+        
         for (ItemPedidoDTO itemDTO : pedidoDTO.itens()) {
+            Produto produto = produtoRepository.findById(itemDTO.produtoId());
+            
+            // Validação básica
+            if (produto == null) {
+                throw new NotFoundException("Produto não encontrado: " + itemDTO.produtoId());
+            }
+            // Opcional: Validar estoque aqui se necessário
+
             ItemPedido ip = new ItemPedido();
             ip.setPedido(entity);
+            ip.setProduto(produto); // <--- O FIX PRINCIPAL ESTÁ AQUI
+            ip.setQuantidade(itemDTO.quantidade());
+            ip.setPreco(produto.getPreco()); // Salva o preço histórico
+            
             itensPedido.add(ip);
         }
-
 
         entity.setItens(itensPedido);
 
@@ -134,7 +155,6 @@ public class PedidoServiceImpl implements PedidoService {
 
         return PedidoResponseDTO.valueOf(entity);
     }
-
     @Override
     public List<PedidoResponseDTO> findByUsuario(String login) {
         Usuario usuario = usuarioRepository.findByLogin(login);

@@ -11,16 +11,16 @@ public record PedidoResponseDTO(
         LocalDate dataPedido,
         String status,
         PessoaResponseDTO cliente,
-        List<ItemResponseDTO> itens
+        List<ItemPedidoResponseDTO> itens
 ) {
     public static PedidoResponseDTO valueOf(Pedido pedido) {
         if (pedido == null)
             return null;
 
         // Converte a lista de entidades ItemPedido em uma lista de DTOs
-        List<ItemResponseDTO> listaItensDTO = pedido.getItens()
+        List<ItemPedidoResponseDTO> listaItensDTO = pedido.getItens()
                 .stream()
-                .map(ItemResponseDTO::valueOf) // (item) -> ItemPedidoResponseDTO.valueOf(item)
+                .map(ItemPedidoResponseDTO::valueOf) // (item) -> ItemPedidoResponseDTO.valueOf(item)
                 .collect(Collectors.toList());
 
         return new PedidoResponseDTO(

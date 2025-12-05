@@ -44,6 +44,7 @@ public class PedidoResource {
 
     @POST
     @Transactional
+    @RolesAllowed("USER")
     public Response createPedido(@Valid PedidoDTO pedidoDTO) {
         String login = jwt.getSubject();
         PedidoResponseDTO createdPedido = pedidoService.createPedido(pedidoDTO, login);
@@ -66,16 +67,5 @@ public class PedidoResource {
     @Transactional
     public void deletePedido(@PathParam("id") Long id) {
         pedidoService.deletePedido(id);
-    }
-
-    @POST
-    @RolesAllowed("USER")
-    public Response incluir(PedidoDTO dto) {
-        // obtendo o usuario do token
-        String login = jwt.getSubject();
-
-        PedidoResponseDTO retorno = pedidoService.createPedido(dto, login);
-
-        return Response.status(201).entity(retorno).build();
     }
 }
